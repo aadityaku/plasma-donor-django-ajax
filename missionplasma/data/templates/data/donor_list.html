@@ -1,0 +1,44 @@
+{% extends 'data/base.html' %}
+
+{% block content %}
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-lg-6 mb-2">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h2 class="display-5 mb-0">{{donorCount}}</h2>
+                    <h4 class="lead">Total Donors</h4>
+                    <a href="{% url 'donorview' %}" class="btn btn-info float-end">View all</a>
+                   
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-2">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h2 class="display-5 mb-0">{{requesterCount}}</h2>
+                    <h4 class="lead">Total Requesters</h4>
+                    <a href="{% url 'requestview' %}" class="btn btn-info float-end">View all</a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 d-block-inline">
+      
+          {% for state in states %}
+          <div class="col-lg-3 my-3 ">
+            <a href="{% url 'statewise' state.id %}" class="btn {% if forloop.counter0|divisibleby:2 %} btn-primary {% else %} btn-info {% endif %}py-3 w-100">
+                 {{state.state}}
+                 
+                 
+                 
+                 <p class="small m-0">Total Donors: {% for x in donor %}{% if x.d_state.id == state.id %}{% endif %}{% endfor %}</p>
+                <p class="small m-0">Total Requesters:</p>
+            </a>
+          </div>
+      {% endfor %}
+      
+      </div>
+</div>
+{% endblock  %}

@@ -1,0 +1,67 @@
+{% extends 'data/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container mt-2">
+    <div class="card col-lg-7 mx-auto">
+        <div class="card-body">
+            <h5 class="h5">Apply As Donor</h5>
+            <hr>
+            <form action="" method="POST">
+               {% csrf_token %}
+               {{donor|crispy}}
+               <div class="mb-3">
+                   
+                    <label for="">Select State</label>
+                    <select name="d_state" id="state-dd" class="form-select">
+                        {% for x in states %}
+                        <option value="{{x.id}}">{{x.state}}</option>
+                        {% endfor %}
+                    </select>
+                 
+                <div class="mb-3">
+
+                
+                   <label for="">Select City</label>
+                   <select name="d_city" id="city-dd" class="form-select" >
+                      
+                       <option value="" selected dissabled>Select All in first</option>
+                       
+                   </select>
+                </div>
+               <div class="mt-3">
+                   <input type="submit" class="btn btn-success w-100">
+               </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% block js %}
+{% load dajaxice_templatetags %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            
+            $('#state-dd').on('change', function () {
+                var idState = this.value;
+                $("#city-dd").html('');
+                $.ajax({
+                    url: "fetch-cities/",
+                    type: "POST",
+                    data: {
+                        d_state: idState,
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        $('#city-dd').html('<option value="">Select City</option>');
+                        $.each(res.cities, function (key, value) {
+                            
+                            $("#city-dd").append('<option value="' + value.id + '">' + value.city + '</option>');
+                                
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock  %}
+{% endblock  %}
